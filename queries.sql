@@ -118,6 +118,49 @@ INNER JOIN country as cy
 ON cy.country_id=ct.country_id
 GROUP BY a.address, ct.city, cy.country;
 
+SELECT s.store_id, a.address, ct.city, cy.country FROM store as s
+INNER JOIN address AS a
+ON s.address_id=a.address_id
+INNER JOIN city as ct
+ON ct.city_id=a.city_id
+INNER JOIN country as cy 
+ON cy.country_id=ct.country_id;
+
+SELECT c.name, SUM(p.amount) AS gross_revenue FROM category as c
+INNER JOIN film_category AS fc
+ON c.category_id=fc.category_id
+INNER JOIN inventory AS i
+ON fc.film_id=i.film_id
+INNER JOIN rental as r
+ON i.inventory_id=r.inventory_id
+INNER JOIN payment as p
+ON r.rental_id=p.rental_id
+GROUP BY name ORDER BY gross_revenue DESC
+LIMIT 5;
+
+CREATE VIEW top5_genres_gross_revenue AS
+SELECT c.name, SUM(p.amount) AS gross_revenue
+FROM category AS c
+INNER JOIN film_category AS fc
+ON c.category_id=fc.category_id
+INNER JOIN inventory AS i
+ON fc.film_id=i.film_id
+INNER JOIN rental as r
+ON i.inventory_id=r.inventory_id
+INNER JOIN payment as p
+ON r.rental_id = p.rental_id
+GROUP BY name ORDER BY gross_revenue DESC
+LIMIT 5;
+
+SELECT * FROM top5_genres_gross_revenue;
+
+DROP VIEW IF EXISTS top5_genres_gross_revenue;
+
+
+
+
+
+
 
 
 
