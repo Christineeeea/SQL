@@ -71,12 +71,60 @@ ON f.film_id = i.film_id
 WHERE f.title = 'Hunchback Impossible'
 GROUP BY f.title;
 
-SELECT c.first_name, c.last_name, SUM(p.amount) AS total_paid
+SELECT c.first_name, c.last_name, SUM(p.amount) AS total_payment
 FROM payment as p
 INNER JOIN customer AS c
 ON p.customer_id = c.customer_id
 GROUP BY c.first_name, c.last_name
 ORDER BY c.last_name, c.first_name;
+
+
+SELECT title FROM film WHERE title LIKE 'Q%' OR title LIKE 'K%'
+AND language_id = (SELECT language_id FROM language WHERE name='English');
+
+
+SELECT first_name, last_name FROM actor WHERE actor_id IN (
+SELECT actor_id FROM film_actor WHERE film_id = (
+SELECT film_id FROM film WHERE title = 'Alone Trip'));
+
+
+SELECT c.first_name, c.last_name, c.email FROM customer as c 
+INNER JOIN address as a ON c.address_id=a.address_id
+INNER JOIN city as ct ON a.city_id=ct.city_id
+INNER JOIN country as cy ON ct.country_id=cy.country_id WHERE cy.country='Canada';
+
+SELECT title FROM film WHERE film_id IN(
+SELECT film_id FROM film_category WHERE category_id=(
+SELECT category_id FROM category WHERE name='Family')
+);
+
+SELECT f.title, COUNT(f.title) AS rent_frequency FROM rental AS r
+INNER JOIN inventory as i ON r.inventory_id=i.inventory_id
+INNER JOIN film as f ON i.film_id=f.film_id
+GROUP BY f.title 
+ORDER BY rent_frequency DESC;
+
+SELECT a.address, ct.city,cy.country, SUM(p.amount) AS revenue
+FROM store as s
+INNER JOIN address as a
+ON S.address_id=a.address_id
+INNER JOIN customer as c
+ON s.store_id=c.store_id
+INNER JOIN payment as p
+ON p.customer_id=c.customer_id
+INNER JOIN city as ct
+ON ct.city_id=a.city_id
+INNER JOIN country as cy
+ON cy.country_id=ct.country_id
+GROUP BY a.address, ct.city, cy.country;
+
+
+
+
+
+
+
+
 
 
 
